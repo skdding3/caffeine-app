@@ -8,9 +8,10 @@ import { Text, View } from 'react-native';
 
 const index = () => {
   return (
-    <View className='bg-slate-200 py-4 px-8 '>
-      <Text className='font-bold'>
-        카페인 앱<Text className='text-red-500'> Test</Text>
+    <View className='bg-black py-4 px-8'>
+      <Text className='font-bold text-white flex flex-col gap-6'>
+        <Text>카페인 앱 </Text>
+        <Text className='text-red-500'>Test</Text>
       </Text>
     </View>
   );
