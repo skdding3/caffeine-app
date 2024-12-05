@@ -9,13 +9,19 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.caffeine.oz"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -23,6 +29,12 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
@@ -32,10 +44,50 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "@mj-studio/react-native-naver-map",
+        {
+          "client_id": "9zz37l80pz",
+          "android": {
+            "ACCESS_FINE_LOCATION": true,
+            "ACCESS_COARSE_LOCATION": true,
+            "ACCESS_BACKGROUND_LOCATION": true
+          },
+          "ios": {
+            "NSLocationAlwaysAndWhenInUseUsageDescription": "{{ your location usage description }}",
+            "NSLocationWhenInUseUsageDescription": "{{ your location usage description }}",
+            "NSLocationTemporaryUsageDescriptionDictionary": {
+              "purposeKey": "{{ your purpose key }}",
+              "usageDescription": "{{ your location usage description }}"
+            }
+          }
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraMavenRepos": [
+              "https://repository.map.naver.com/archive/maven"
+            ]
+          },
+          "ios": {
+            "newArchEnabled": true
+          }
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "cbd33fea-c369-4fec-9c60-4a63fa876e0b"
+      }
     }
   }
 }
