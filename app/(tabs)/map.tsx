@@ -1,35 +1,49 @@
 import {
-  NaverMapMarkerOverlay,
+  NaverMapCircleOverlay,
   NaverMapView,
 } from '@mj-studio/react-native-naver-map';
-
+import * as Location from 'expo-location';
 import { useNavigation } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 const map = () => {
   // * STATE
   const navigation = useNavigation();
   const [location, setLocation] = useState({ latitude: 0, longitude: 0 });
 
-  // const getCurrentLocation = async () => {
-  //   let { status } = await Location.requestForegroundPermissionsAsync();
-  //   if (status !== 'granted') {
-  //     Alert.alert('Permission to access location was denied');
-  //     return;
-  //   }
+  const getLocation = async () => {
+    try {
+      // 위치 권한 요청
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('위치 정보를 가져올 권한이 없습니다.');
+        return;
+      }
 
-  //   const location = await Location.getCurrentPositionAsync({
-  //     accuracy: Location.Accuracy.High,
-  //   });
-  //   setLocation({
-  //     latitude: location.coords.latitude,
-  //     longitude: location.coords.longitude,
-  //   });
-  // };
+      // 현재 위치 가져오기
+      const currentLocation = await Location.getCurrentPositionAsync();
+      console.log('currentLocation', currentLocation);
+
+      const { latitude, longitude } = currentLocation.coords;
+      const reverseGeocode = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude,
+      });
+      console.log(reverseGeocode);
+      // setLocation({
+      //   reverseGeocode,
+      //   // latitude: currentLocation.coords.latitude,
+      //   // longitude: currentLocation.coords.longitude,
+      // });
+    } catch (error) {
+      Alert.alert('위치 정보를 가져오는 중 오류가 발생했습니다.');
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    // getCurrentLocation();
+    getLocation();
   }, []);
   return (
     <>
@@ -37,13 +51,16 @@ const map = () => {
         <NaverMapView
           isShowLocationButton={true}
           style={{ width: '100%', height: '100%' }}
+          camera={{
+            latitude: 37.50497126,
+            longitude: 127.04905021,
+          }}
+          isExtentBoundedInKorea={true}
         >
-          <NaverMapMarkerOverlay
-            latitude={location.latitude}
-            longitude={location.longitude}
-          >
-            {/* <View style={{ width: 100, height: 100 }} /> */}
-          </NaverMapMarkerOverlay>
+          <NaverMapCircleOverlay
+            latitude={37.50497126}
+            longitude={127.04905021}
+          />
         </NaverMapView>
       </View>
     </>
